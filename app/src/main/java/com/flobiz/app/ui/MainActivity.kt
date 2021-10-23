@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
 		super.onCreate(savedInstanceState)
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-		val questionRepository = QuestionRepository(WebServiceClient.apiInterface)
+		val questionRepository = QuestionRepository(WebServiceClient(this).apiInterface)
 		questionViewModel =
 			ViewModelProvider(this, QuestionViewModelFactory(questionRepository)).get(
 				QuestionViewModel::class.java

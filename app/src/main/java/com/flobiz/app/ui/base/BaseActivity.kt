@@ -1,13 +1,8 @@
 package com.flobiz.app.ui.base
 
-import android.view.Menu
-import android.view.MenuItem
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import com.flobiz.app.R
-import com.flobiz.app.model.Question
 import com.flobiz.app.util.ConnectionStateMonitor
 import com.flobiz.app.util.CustomSnackBar
 import com.google.android.material.snackbar.Snackbar
@@ -29,10 +24,8 @@ open class BaseActivity : AppCompatActivity(),
 
 		if (connectionStateMonitor == null)
 			connectionStateMonitor = ConnectionStateMonitor(this, this)
-		//Register
 		connectionStateMonitor?.enable()
 
-		// Recheck network status manually whenever activity resumes
 		val res = connectionStateMonitor?.hasNetworkConnection()
 		if (res == false) {
 			onNegative()
@@ -43,14 +36,9 @@ open class BaseActivity : AppCompatActivity(),
 	}
 
 	override fun onPause() {
-		//My whole day effort to handle a memory leak caused by SnackBar, which involved passing WeakReferences & clearing them,
-		//making variables null, and so on but later found that
-		// it was apparently caused by the support library itself in v28.0.0 and was
-		//fixed in androidx 1.1.0+
 		snackbar?.dismiss()
 		snackbar = null
 		firstLaunch = true
-		//Unregister
 		connectionStateMonitor?.disable()
 		connectionStateMonitor = null
 		super.onPause()
