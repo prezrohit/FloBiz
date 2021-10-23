@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<import type="com.flobiz.app.util.Formatter" />
+
+		<import type="com.flobiz.app.util.ImageLoader" />
+
+		<variable
+			name="question"
+			type="com.flobiz.app.model.Question" />
+
+		<variable
+			name="presenter"
+			type="com.flobiz.app.ui.presenter.MainActivityPresenter" />
+	</data>
+
+	<androidx.cardview.widget.CardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="5dp"
+		android:elevation="0dp"
+		android:onClick="@{() -> presenter.onClickItem(question)}">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:padding="10dp">
+
+			<ImageView
+				android:id="@+id/img_avatar"
+				url="@{question.owner.profile_image}"
+				android:layout_width="60dp"
+				android:layout_height="60dp"
+				android:src="@drawable/loading"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/txtTitle"
+				style="@style/questionTitle"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="10dp"
+				android:ellipsize="end"
+				android:maxLines="2"
+				android:text="@{question.title}"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@+id/img_avatar"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/txtPostedBy"
+				style="@style/TextAppearance.MaterialComponents.Subtitle1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="10dp"
+				android:text="@{question.owner.display_name}"
+				app:layout_constraintStart_toEndOf="@+id/img_avatar"
+				app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+			<TextView
+				android:id="@+id/txtDatePosted"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="10dp"
+				android:text="@{Formatter.format(question.creation_date)}"
+				app:layout_constraintBottom_toBottomOf="@+id/txtPostedBy"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintTop_toTopOf="@+id/txtPostedBy" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</androidx.cardview.widget.CardView>
+</layout>

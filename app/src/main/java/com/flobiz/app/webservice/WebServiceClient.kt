@@ -12,10 +12,9 @@ object WebServiceClient {
 
 	private val retrofitClient: Retrofit.Builder by lazy {
 
-		val levelType: HttpLoggingInterceptor.Level
-		if (BuildConfig.BUILD_TYPE.contentEquals("debug"))
-			levelType = HttpLoggingInterceptor.Level.BODY else levelType =
-			HttpLoggingInterceptor.Level.NONE
+		val levelType: HttpLoggingInterceptor.Level =
+			if (BuildConfig.BUILD_TYPE.contentEquals("debug"))
+				HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 
 		val logging = HttpLoggingInterceptor()
 		logging.setLevel(levelType)

@@ -1,42 +1,42 @@
 package com.flobiz.app.model
 
-class QuestionResponse(private val items: List<Question>) {
+class QuestionResponse(val items: List<Question>) {
 	override fun toString(): String {
 		return "QuestionResponse(questionList=$items)"
 	}
 }
 
 class Question(
-	private val tags: List<String>,
-	private val owner: Owner,
-	private val isAnswered: Boolean,
-	private val viewCount: Int,
-	private val acceptedAnswerId: Int,
-	private val answerCount: Int,
-	private val score: Int,
-	private val creationDate: String,
-	private val questionId: String,
-	private val contentLicense: String,
-	private val link: String,
-	private val title: String
+	val tags: List<String>,
+	val owner: Owner,
+	val is_answered: Boolean,
+	val view_count: Int,
+	val accepted_answer_id: Int,
+	val answer_count: Int,
+	val score: Int,
+	val creation_date: String,
+	val question_id: String,
+	val content_license: String,
+	val link: String,
+	val title: String
 
 ) {
 	override fun toString(): String {
-		return "Question(tags=$tags, owner=$owner, isAnswered=$isAnswered, viewCount=$viewCount, acceptedAnswerId=$acceptedAnswerId, answerCount=$answerCount, score=$score, creationDate='$creationDate', questionId='$questionId', contentLicense='$contentLicense', link='$link', title='$title')"
+		return "Question(tags=$tags, owner=$owner, isAnswered=$is_answered, viewCount=$view_count, acceptedAnswerId=$accepted_answer_id, answerCount=$answer_count, score=$score, creationDate='$creation_date', questionId='$question_id', contentLicense='$content_license', link='$link', title='$title')"
 	}
 }
 
 class Owner(
-	private val reputation: Int,
-	private val userId: String,
-	private val userType: String,
-	private val acceptRate: Int,
-	private val profileImage: String,
-	private val displayName: String,
-	private val link: String
+	val reputation: Int,
+	val user_id: String,
+	val user_type: String,
+	val accept_rate: Int,
+	val profile_image: String,
+	val display_name: String,
+	val link: String
 
 ) {
 	override fun toString(): String {
-		return "Owner(reputation=$reputation, userId='$userId', userType='$userType', acceptRate=$acceptRate, profileImage='$profileImage', displayName='$displayName', link='$link')"
+		return "Owner(reputation=$reputation, userId='$user_id', userType='$user_type', acceptRate=$accept_rate, profileImage='$profile_image', displayName='$display_name', link='$link')"
 	}
 }

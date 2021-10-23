@@ -1,4 +1,4 @@
-package com.flobiz.app.ui
+package com.flobiz.app.ui.base
 
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
