@@ -1,7 +1,7 @@
 package com.flobiz.app.webservice
 
 import android.content.Context
-import com.flobiz.app.MyApplication
+import com.flobiz.app.main.FloBizApplication
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
@@ -37,7 +37,7 @@ class WebServiceClient(private var context: Context) {
 	private var offlineInterceptor: Interceptor = object : Interceptor {
 		override fun intercept(chain: Interceptor.Chain): Response {
 			var request: Request = chain.request()
-			if (!MyApplication.hasNetwork()) {
+			if (!FloBizApplication.hasNetwork()) {
 				val maxStale = 60 * 60 * 24 * 30
 				request = request.newBuilder()
 					.header("Cache-Control", "public, only-if-cached, max-stale=$maxStale")

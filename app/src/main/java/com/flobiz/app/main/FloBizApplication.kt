@@ -1,11 +1,10 @@
-package com.flobiz.app
-
+package com.flobiz.app.main
 
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 
-class MyApplication : Application() {
+class FloBizApplication : Application() {
 	override fun onCreate() {
 		super.onCreate()
 		if (instance == null) {
@@ -22,7 +21,7 @@ class MyApplication : Application() {
 		}
 
 	companion object {
-		var instance: MyApplication? = null
+		var instance: FloBizApplication? = null
 			private set
 
 		fun hasNetwork(): Boolean {
