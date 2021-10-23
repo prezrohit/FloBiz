@@ -48,6 +48,11 @@ class QuestionAdapter(private val context : Context, private var questionList: L
 		holder.bind(questionList[position])
 	}
 
+	fun setList(questionList: List<Question>) {
+		this.questionList = questionList
+		notifyDataSetChanged()
+	}
+
 	inner class QuestionViewHolder(private val binding: RowQuestionBinding) :
 		RecyclerView.ViewHolder(binding.root) {
 		fun bind(item: Question) {

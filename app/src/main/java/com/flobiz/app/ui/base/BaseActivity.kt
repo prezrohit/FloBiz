@@ -1,8 +1,13 @@
 package com.flobiz.app.ui.base
 
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.flobiz.app.R
+import com.flobiz.app.model.Question
 import com.flobiz.app.util.ConnectionStateMonitor
 import com.flobiz.app.util.CustomSnackBar
 import com.google.android.material.snackbar.Snackbar
@@ -10,10 +15,10 @@ import com.google.android.material.snackbar.Snackbar
 open class BaseActivity : AppCompatActivity(),
 	ConnectionStateMonitor.OnNetworkAvailableCallbacks {
 
+	private var firstLaunch = true
+	private var viewGroup: ViewGroup? = null
 	private var snackbar: CustomSnackBar? = null
 	private var connectionStateMonitor: ConnectionStateMonitor? = null
-	private var viewGroup: ViewGroup? = null
-	private var firstLaunch = true
 
 	override fun onResume() {
 		super.onResume()
