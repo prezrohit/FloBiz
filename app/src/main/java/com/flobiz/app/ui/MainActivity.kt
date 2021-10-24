@@ -1,6 +1,7 @@
 package com.flobiz.app.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
@@ -49,12 +50,19 @@ class MainActivity : BaseActivity() {
 			Constants.site
 
 		).observe(this, { response ->
+
+			questionViewModel.getAverageCount(response).observe(this, { list->
+				Log.d(TAG, "onCreate: AvgViewCount: " + list[0] + " AvgAnsCount: " + list[1])
+			})
+
 			binding.rvQuestions.also {
 				originalList.clear()
 				originalList.addAll(response.items)
 				adapter.setList(response.items)
 			}
 		})
+
+
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
