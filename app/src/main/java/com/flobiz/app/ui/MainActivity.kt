@@ -3,6 +3,7 @@ package com.flobiz.app.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,7 @@ import com.flobiz.app.R
 import com.flobiz.app.databinding.ActivityMainBinding
 import com.flobiz.app.model.Question
 import com.flobiz.app.repository.QuestionRepository
+import com.flobiz.app.ui.adapter.QuestionAdapter
 import com.flobiz.app.ui.base.BaseActivity
 import com.flobiz.app.ui.viewmodel.QuestionViewModel
 import com.flobiz.app.ui.viewmodel.QuestionViewModelFactory
@@ -18,12 +20,11 @@ import com.flobiz.app.webservice.WebServiceClient
 
 class MainActivity : BaseActivity() {
 
-	private val TAG = "MainActivity"
+	private lateinit var binding: ActivityMainBinding
+	private lateinit var questionViewModel: QuestionViewModel
+
 	private var filteredList: ArrayList<Question> = arrayListOf()
 	private var originalList: ArrayList<Question> = arrayListOf()
-	private lateinit var binding: ActivityMainBinding
-
-	private lateinit var questionViewModel: QuestionViewModel
 
 	private val adapter = QuestionAdapter(this, arrayListOf())
 
@@ -49,6 +50,7 @@ class MainActivity : BaseActivity() {
 			Constants.site
 
 		).observe(this, { response ->
+			binding.progressBar.visibility = View.GONE
 			binding.rvQuestions.also {
 				originalList.clear()
 				originalList.addAll(response.items)
@@ -58,9 +60,15 @@ class MainActivity : BaseActivity() {
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-		menuInflater.inflate(R.menu.menu, menu)
-		val item = menu?.findItem(R.id.action_search)
+		menuInflater.inflate(com.flobiz.app.R.menu.menu, menu)
+		val item = menu?.findItem(com.flobiz.app.R.id.action_search)
 		val searchView = item?.actionView as SearchView
+
+		val filterItem = menu.findItem(com.flobiz.app.R.id.action_filter)
+		filterItem.setOnMenuItemClickListener {
+			item.expandActionView()
+			return@setOnMenuItemClickListener true
+		}
 
 		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 			override fun onQueryTextSubmit(query: String?): Boolean {
@@ -76,7 +84,10 @@ class MainActivity : BaseActivity() {
 		})
 
 		item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+
 			override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+				binding.rvQuestions.visibility = View.VISIBLE
+				binding.txtNoResult.visibility = View.GONE
 				adapter.setList(originalList)
 				return true
 			}
@@ -94,13 +105,23 @@ class MainActivity : BaseActivity() {
 
 		originalList.forEach { question ->
 			if (question.title.contains(string!!, true)
-				|| question.owner.display_name.contains(
-					string,
-					true
-				)
+				|| question.owner.display_name.contains(string, true)
 			)
 				filteredList.add(question)
 		}
-		adapter.setList(filteredList)
+
+		if (filteredList.isEmpty()) {
+			binding.txtNoResult.visibility = View.VISIBLE
+			binding.rvQuestions.visibility = View.GONE
+
+		} else {
+			binding.rvQuestions.visibility = View.VISIBLE
+			binding.txtNoResult.visibility = View.GONE
+			adapter.setList(filteredList)
+		}
+	}
+
+	companion object {
+		private const val TAG = "MainActivity"
 	}
 }

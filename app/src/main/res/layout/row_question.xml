@@ -6,7 +6,7 @@
 
 		<import type="com.flobiz.app.util.Formatter" />
 
-		<import type="com.flobiz.app.util.ImageLoader" />
+		<import type="com.flobiz.app.util.BindingAdapter" />
 
 		<variable
 			name="question"
