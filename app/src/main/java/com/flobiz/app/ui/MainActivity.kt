@@ -1,6 +1,7 @@
 package com.flobiz.app.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,11 +23,10 @@ class MainActivity : BaseActivity() {
 
 	private lateinit var binding: ActivityMainBinding
 	private lateinit var questionViewModel: QuestionViewModel
+	private val adapter = QuestionAdapter(this, arrayListOf())
 
 	private var filteredList: ArrayList<Question> = arrayListOf()
 	private var originalList: ArrayList<Question> = arrayListOf()
-
-	private val adapter = QuestionAdapter(this, arrayListOf())
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -50,7 +50,13 @@ class MainActivity : BaseActivity() {
 			Constants.site
 
 		).observe(this, { response ->
+
 			binding.progressBar.visibility = View.GONE
+
+			questionViewModel.getAverageCount(response).observe(this, { list ->
+				Log.d(TAG, "onCreate: AvgViewCount: " + list[0] + " AvgAnsCount: " + list[1])
+			})
+
 			binding.rvQuestions.also {
 				originalList.clear()
 				originalList.addAll(response.items)
@@ -60,15 +66,9 @@ class MainActivity : BaseActivity() {
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-		menuInflater.inflate(com.flobiz.app.R.menu.menu, menu)
-		val item = menu?.findItem(com.flobiz.app.R.id.action_search)
+		menuInflater.inflate(R.menu.menu, menu)
+		val item = menu?.findItem(R.id.action_search)
 		val searchView = item?.actionView as SearchView
-
-		val filterItem = menu.findItem(com.flobiz.app.R.id.action_filter)
-		filterItem.setOnMenuItemClickListener {
-			item.expandActionView()
-			return@setOnMenuItemClickListener true
-		}
 
 		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 			override fun onQueryTextSubmit(query: String?): Boolean {
@@ -84,7 +84,6 @@ class MainActivity : BaseActivity() {
 		})
 
 		item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-
 			override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
 				binding.rvQuestions.visibility = View.VISIBLE
 				binding.txtNoResult.visibility = View.GONE
@@ -105,7 +104,10 @@ class MainActivity : BaseActivity() {
 
 		originalList.forEach { question ->
 			if (question.title.contains(string!!, true)
-				|| question.owner.display_name.contains(string, true)
+				|| question.owner.display_name.contains(
+					string,
+					true
+				)
 			)
 				filteredList.add(question)
 		}
@@ -120,7 +122,7 @@ class MainActivity : BaseActivity() {
 			adapter.setList(filteredList)
 		}
 	}
-
+	
 	companion object {
 		private const val TAG = "MainActivity"
 	}

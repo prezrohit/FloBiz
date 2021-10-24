@@ -48,8 +48,6 @@
 					android:layout_height="match_parent"
 					android:text="Hello Darkness" />
 
-
-
 			</androidx.constraintlayout.widget.ConstraintLayout>
 
 		</androidx.cardview.widget.CardView>
