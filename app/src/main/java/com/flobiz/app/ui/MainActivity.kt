@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.flobiz.app.R
 import com.flobiz.app.databinding.ActivityMainBinding
 import com.flobiz.app.model.Question
+import com.flobiz.app.model.Tag
 import com.flobiz.app.repository.QuestionRepository
 import com.flobiz.app.ui.adapter.QuestionAdapter
 import com.flobiz.app.ui.base.BaseActivity
@@ -32,11 +33,11 @@ class MainActivity : BaseActivity() {
 		super.onCreate(savedInstanceState)
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+		setSupportActionBar(binding.toolbar)
+
 		val questionRepository = QuestionRepository(WebServiceClient(this).apiInterface)
 		questionViewModel =
-			ViewModelProvider(this, QuestionViewModelFactory(questionRepository)).get(
-				QuestionViewModel::class.java
-			)
+			ViewModelProvider(this, QuestionViewModelFactory(questionRepository))[QuestionViewModel::class.java]
 
 		binding.rvQuestions.also {
 			it.setHasFixedSize(true)
@@ -54,7 +55,8 @@ class MainActivity : BaseActivity() {
 			binding.progressBar.visibility = View.GONE
 
 			questionViewModel.getAverageCount(response).observe(this, { list ->
-				Log.d(TAG, "onCreate: AvgViewCount: " + list[0] + " AvgAnsCount: " + list[1])
+				binding.lblAvgViewCount.text = list[0]
+				binding.lblAvgAnsCount.text = list[1]
 			})
 
 			binding.rvQuestions.also {
@@ -69,6 +71,42 @@ class MainActivity : BaseActivity() {
 		menuInflater.inflate(R.menu.menu, menu)
 		val item = menu?.findItem(R.id.action_search)
 		val searchView = item?.actionView as SearchView
+
+		val filterItem = menu.findItem(R.id.action_filter)
+		filterItem.setOnMenuItemClickListener {
+			val bottomSheetFragment =
+				BottomSheetFragment(
+					arrayListOf(
+						Tag("agadfds"),
+						Tag("fdfdsgdsgsdgdsgsd"),
+						Tag("agadfds"),
+						Tag("agafdfdsfdfds"),
+						Tag("fdfdsgdsgsdgdsgsd"),
+						Tag("agadfds"),
+						Tag("fddsffdsfsdfdfsdfdsfdsfdsfdsfdsfsdfsfdsdsf"),
+						Tag("agadffdsffdds"),
+						Tag("fdfdsgdsfsdfdsgsdgdsgsd"),
+						Tag("agadfds"),
+						Tag("fdfdsgdsgsdgdsgsd"),
+						Tag("fddsfdsfdsf"),
+						Tag("agadfdsfsdfdsfdsfdsfdsfsdfdsds"),
+						Tag("fddsfdsf"),
+						Tag("fddsfdsf"),
+						Tag("fddsfdsf"),
+						Tag("agadfds"),
+						Tag("fddsffdsfsdfdfsdfdsfdsfdsfdsfdsfsdfsfdsdsf"),
+						Tag("agadffdsffdds"),
+						Tag("fdfdsgdsfsdfdsgsdgdsgsd"),
+						Tag("agadfds"),
+						Tag("fdfdsgdsgsdgdsgsd"),
+						Tag("fddsfdsfdsf"),
+						Tag("agadfdsfsdfdsfdsfdsfdsfsdfdsds"),
+					)
+				)
+			bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
+
+			return@setOnMenuItemClickListener true
+		}
 
 		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 			override fun onQueryTextSubmit(query: String?): Boolean {
@@ -113,6 +151,7 @@ class MainActivity : BaseActivity() {
 		}
 
 		if (filteredList.isEmpty()) {
+			Log.d(TAG, "rv gone: #@#$@----$#$#@@")
 			binding.txtNoResult.visibility = View.VISIBLE
 			binding.rvQuestions.visibility = View.GONE
 
@@ -122,7 +161,7 @@ class MainActivity : BaseActivity() {
 			adapter.setList(filteredList)
 		}
 	}
-	
+
 	companion object {
 		private const val TAG = "MainActivity"
 	}

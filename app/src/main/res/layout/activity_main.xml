@@ -3,83 +3,155 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:id="@+id/coordinatorLayout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		tools:context=".ui.MainActivity">
-
-		<ProgressBar
-			android:id="@+id/progressBar"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
 
 		<TextView
 			android:id="@+id/txtNoResult"
 			style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="No Results Found"
+			android:textSize="20sp"
 			android:visibility="gone"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:translationZ="1dp"
+			android:text="No Results Found"
+			/>
 
-		<androidx.cardview.widget.CardView
-			android:id="@+id/containerViewCount"
+		<ProgressBar
+			android:id="@+id/progressBar"
+			android:text="fdfsdfs"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="24dp"
-			app:layout_constraintEnd_toStartOf="@+id/containerAnswerCount"
-			app:layout_constraintHorizontal_bias="0.5"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent">
+			android:layout_gravity="center"
+			android:translationZ="1dp"
+			/>
 
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:layout_width="wrap_content"
+		<com.google.android.material.appbar.AppBarLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:fitsSystemWindows="true"
+			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+			<androidx.appcompat.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				app:layout_collapseMode="pin"
+				app:layout_scrollFlags="scroll|enterAlways"
+				app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+			<com.google.android.material.appbar.CollapsingToolbarLayout
+				android:id="@+id/collapsing_toolbar"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<TextView
+				<androidx.constraintlayout.widget.ConstraintLayout
 					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:text="Hello Darkness" />
+					android:layout_height="wrap_content"
+					android:paddingVertical="10dp">
 
-			</androidx.constraintlayout.widget.ConstraintLayout>
+					<androidx.constraintlayout.widget.ConstraintLayout
+						android:id="@+id/constraintLayout2"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+						app:layout_constraintHorizontal_bias="0.5"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent">
 
-		</androidx.cardview.widget.CardView>
+						<TextView
+							android:id="@+id/textView2"
+							style="@style/TextAppearance.MaterialComponents.Subtitle1"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:gravity="center"
+							android:padding="4dp"
+							android:text="Avg View Count"
+							app:layout_constraintBottom_toTopOf="@+id/lblAvgViewCount"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintHorizontal_bias="0.5"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="parent" />
 
-		<androidx.cardview.widget.CardView
-			android:id="@+id/containerAnswerCount"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="24dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintHorizontal_bias="0.5"
-			app:layout_constraintStart_toEndOf="@+id/containerViewCount"
-			app:layout_constraintTop_toTopOf="parent">
+						<TextView
+							android:id="@+id/lblAvgViewCount"
+							style="@style/TextAppearance.AppCompat.Title"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:gravity="center"
+							android:padding="4dp"
+							android:text="0"
+							app:layout_constraintBottom_toBottomOf="parent"
+							app:layout_constraintEnd_toEndOf="@id/textView2"
+							app:layout_constraintHorizontal_bias="0.5"
+							app:layout_constraintStart_toStartOf="@id/textView2"
+							app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:text="my old friend" />
+					</androidx.constraintlayout.widget.ConstraintLayout>
 
-		</androidx.cardview.widget.CardView>
+					<androidx.constraintlayout.widget.ConstraintLayout
+						android:id="@+id/constraintLayout"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintHorizontal_bias="0.5"
+						app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+						app:layout_constraintTop_toTopOf="@+id/constraintLayout2">
+
+						<TextView
+							android:id="@+id/textView3"
+							style="@style/TextAppearance.MaterialComponents.Subtitle1"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:gravity="center"
+							android:padding="4dp"
+							android:text="Avg Answer Count"
+							app:layout_constraintBottom_toTopOf="@+id/lblAvgAnsCount"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintHorizontal_bias="0.5"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="parent" />
+
+						<TextView
+							android:id="@+id/lblAvgAnsCount"
+							style="@style/TextAppearance.AppCompat.Title"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:gravity="center"
+							android:padding="4dp"
+							android:text="0"
+							app:layout_constraintBottom_toBottomOf="parent"
+							app:layout_constraintEnd_toEndOf="@id/textView3"
+							app:layout_constraintHorizontal_bias="0.5"
+							app:layout_constraintStart_toStartOf="@id/textView3"
+							app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+					</androidx.constraintlayout.widget.ConstraintLayout>
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+
+			</com.google.android.material.appbar.CollapsingToolbarLayout>
+		</com.google.android.material.appbar.AppBarLayout>
 
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/rvQuestions"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_insetEdge="bottom"
 			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/containerAnswerCount"
 			tools:listitem="@layout/row_question" />
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

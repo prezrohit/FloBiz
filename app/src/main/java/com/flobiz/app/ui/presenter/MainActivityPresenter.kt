@@ -1,6 +1,5 @@
 package com.flobiz.app.ui.presenter
 
-import android.content.Context
 import com.flobiz.app.model.Question
 import com.flobiz.app.ui.contract.MainActivityContract
 
