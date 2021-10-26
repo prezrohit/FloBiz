@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.flobiz.app.R
 import com.flobiz.app.databinding.ActivityMainBinding
@@ -16,17 +17,21 @@ import com.flobiz.app.model.Tag
 import com.flobiz.app.repository.QuestionRepository
 import com.flobiz.app.ui.adapter.QuestionAdapter
 import com.flobiz.app.ui.base.BaseActivity
+import com.flobiz.app.ui.contract.TagCheckedListener
 import com.flobiz.app.ui.viewmodel.QuestionViewModel
 import com.flobiz.app.ui.viewmodel.QuestionViewModelFactory
 import com.flobiz.app.util.Constants
 import com.flobiz.app.webservice.WebServiceClient
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), TagCheckedListener {
+
+	private var checkedIndex: Int = -1
 
 	private lateinit var binding: ActivityMainBinding
 	private lateinit var questionViewModel: QuestionViewModel
 	private val adapter = QuestionAdapter(this, arrayListOf())
 
+	private var tagList: ArrayList<Tag> = arrayListOf()
 	private var filteredList: ArrayList<Question> = arrayListOf()
 	private var originalList: ArrayList<Question> = arrayListOf()
 
@@ -58,6 +63,12 @@ class MainActivity : BaseActivity() {
 
 			binding.progressBar.visibility = View.GONE
 
+			response.items.forEach { question ->
+				question.tags.forEach { tag ->
+					tagList.add(Tag(tag, MutableLiveData(false)))
+				}
+			}
+
 			questionViewModel.getAverageCount(response).observe(this, { list ->
 				binding.lblAvgViewCount.text = list[0]
 				binding.lblAvgAnsCount.text = list[1]
@@ -77,8 +88,9 @@ class MainActivity : BaseActivity() {
 		val searchView = item?.actionView as SearchView
 
 		val filterItem = menu.findItem(R.id.action_filter)
+		handleCheckedTag()
 		filterItem.setOnMenuItemClickListener {
-			val bottomSheetFragment = BottomSheetFragment(originalList)
+			val bottomSheetFragment = BottomSheetFragment(handleCheckedTag(), this)
 			bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
 			return@setOnMenuItemClickListener true
 		}
@@ -101,6 +113,7 @@ class MainActivity : BaseActivity() {
 				binding.rvQuestions.visibility = View.VISIBLE
 				binding.txtNoResult.visibility = View.GONE
 				adapter.setList(originalList)
+
 				questionViewModel.getAverageCount(QuestionResponse(originalList))
 					.observe(this@MainActivity, { list ->
 						binding.lblAvgViewCount.text = list[0]
@@ -110,6 +123,7 @@ class MainActivity : BaseActivity() {
 			}
 
 			override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+				if (checkedIndex != -1) searchQuery("")
 				return true
 			}
 		})
@@ -120,12 +134,11 @@ class MainActivity : BaseActivity() {
 	fun searchQuery(string: String?) {
 		filteredList.clear()
 
+		Log.d(TAG, "on search: $checkedIndex")
 		originalList.forEach { question ->
-			if (question.title.contains(string!!, true)
-				|| question.owner.display_name.contains(
-					string,
-					true
-				)
+			if ((checkedIndex == -1 || question.tags.contains(tagList[checkedIndex - 1].name))
+				&& (question.title.contains(string!!, true)
+						|| question.owner.display_name.contains(string, true))
 			)
 				filteredList.add(question)
 		}
@@ -146,6 +159,26 @@ class MainActivity : BaseActivity() {
 			binding.txtNoResult.visibility = View.GONE
 			adapter.setList(filteredList)
 		}
+	}
+
+	private fun handleCheckedTag(): List<Tag> {
+		val newList: ArrayList<Tag> = arrayListOf()
+		var temp = checkedIndex
+		tagList.forEach { tag ->
+			temp--
+			if (temp == 0) newList.add(Tag(tag.name, MutableLiveData(true)))
+			else newList.add(tag)
+		}
+		return newList
+	}
+
+	override fun onTagChecked(index: Int) {
+		checkedIndex = index
+
+		if (checkedIndex >= tagList.size) {
+			checkedIndex %= tagList.size
+		}
+		Log.d(TAG, "onTagChecked: $checkedIndex")
 	}
 
 	companion object {

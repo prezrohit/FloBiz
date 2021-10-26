@@ -5,18 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
+import androidx.core.view.size
 import com.flobiz.app.databinding.LayoutBottomSheetBinding
-import com.flobiz.app.model.Question
 import com.flobiz.app.model.Tag
+import com.flobiz.app.ui.contract.TagCheckedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 
 class BottomSheetFragment(
-	private var list: List<Question>
+	private var list: List<Tag>,
+	private val tagCheckedListener: TagCheckedListener
 ) : BottomSheetDialogFragment() {
 
-	private var tagList: ArrayList<Tag> = arrayListOf()
 	private lateinit var binding: LayoutBottomSheetBinding
 
 	override fun onCreateView(
@@ -28,13 +28,9 @@ class BottomSheetFragment(
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
 		binding.chipGroup.isSingleSelection = true
-		list.forEach { question ->
-			question.tags.forEach { tag ->
-				tagList.add(Tag(tag, MutableLiveData(false)))
-			}
-		}
 
-		tagList.forEach { tag ->
+
+		list.forEach { tag ->
 			val chip = Chip(context)
 			chip.text = tag.name
 			chip.isCheckable = true
@@ -45,8 +41,14 @@ class BottomSheetFragment(
 		}
 
 		binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
-			Log.d(TAG, "onCreateView: ${binding.chipGroup.checkedChipId}" )
+			/*Log.d(TAG, "onCreateView: $checkedId")
+			if (checkedId >= 0)
+				Log.d(TAG, "from List: ${list[checkedId - 1].name}")
+*/
+			tagCheckedListener.onTagChecked(checkedId)
 		}
+
+		Log.d(TAG, "group size: ${binding.chipGroup.size}")
 
 		return binding.root
 	}
