@@ -1,22 +1,22 @@
 package com.flobiz.app.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import com.flobiz.app.databinding.LayoutBottomSheetBinding
+import com.flobiz.app.model.Question
 import com.flobiz.app.model.Tag
-import com.flobiz.app.ui.adapter.TagAdapter
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
 
 class BottomSheetFragment(
-	private var tagList: List<Tag>
+	private var list: List<Question>
 ) : BottomSheetDialogFragment() {
 
-	private lateinit var adapter: TagAdapter
+	private var tagList: ArrayList<Tag> = arrayListOf()
 	private lateinit var binding: LayoutBottomSheetBinding
 
 	override fun onCreateView(
@@ -27,17 +27,25 @@ class BottomSheetFragment(
 
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
-		val flexBoxLayoutManager = FlexboxLayoutManager(context)
-		flexBoxLayoutManager.flexDirection = FlexDirection.ROW
-		flexBoxLayoutManager.justifyContent = JustifyContent.SPACE_AROUND
+		binding.chipGroup.isSingleSelection = true
+		list.forEach { question ->
+			question.tags.forEach { tag ->
+				tagList.add(Tag(tag, MutableLiveData(false)))
+			}
+		}
 
-		binding.rvTags.layoutManager = flexBoxLayoutManager
+		tagList.forEach { tag ->
+			val chip = Chip(context)
+			chip.text = tag.name
+			chip.isCheckable = true
+			tag.isChecked.observe(this, {
+				chip.isChecked = it
+			})
+			binding.chipGroup.addView(chip)
+		}
 
-		adapter = TagAdapter(tagList)
-
-		binding.rvTags.also { rvTag ->
-			rvTag.setHasFixedSize(true)
-			rvTag.adapter = adapter
+		binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+			Log.d(TAG, "onCreateView: ${binding.chipGroup.checkedChipId}" )
 		}
 
 		return binding.root

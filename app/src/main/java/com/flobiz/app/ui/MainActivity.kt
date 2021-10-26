@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.flobiz.app.R
 import com.flobiz.app.databinding.ActivityMainBinding
 import com.flobiz.app.model.Question
+import com.flobiz.app.model.QuestionResponse
 import com.flobiz.app.model.Tag
 import com.flobiz.app.repository.QuestionRepository
 import com.flobiz.app.ui.adapter.QuestionAdapter
@@ -37,7 +38,10 @@ class MainActivity : BaseActivity() {
 
 		val questionRepository = QuestionRepository(WebServiceClient(this).apiInterface)
 		questionViewModel =
-			ViewModelProvider(this, QuestionViewModelFactory(questionRepository))[QuestionViewModel::class.java]
+			ViewModelProvider(
+				this,
+				QuestionViewModelFactory(questionRepository)
+			)[QuestionViewModel::class.java]
 
 		binding.rvQuestions.also {
 			it.setHasFixedSize(true)
@@ -74,37 +78,8 @@ class MainActivity : BaseActivity() {
 
 		val filterItem = menu.findItem(R.id.action_filter)
 		filterItem.setOnMenuItemClickListener {
-			val bottomSheetFragment =
-				BottomSheetFragment(
-					arrayListOf(
-						Tag("agadfds"),
-						Tag("fdfdsgdsgsdgdsgsd"),
-						Tag("agadfds"),
-						Tag("agafdfdsfdfds"),
-						Tag("fdfdsgdsgsdgdsgsd"),
-						Tag("agadfds"),
-						Tag("fddsffdsfsdfdfsdfdsfdsfdsfdsfdsfsdfsfdsdsf"),
-						Tag("agadffdsffdds"),
-						Tag("fdfdsgdsfsdfdsgsdgdsgsd"),
-						Tag("agadfds"),
-						Tag("fdfdsgdsgsdgdsgsd"),
-						Tag("fddsfdsfdsf"),
-						Tag("agadfdsfsdfdsfdsfdsfdsfsdfdsds"),
-						Tag("fddsfdsf"),
-						Tag("fddsfdsf"),
-						Tag("fddsfdsf"),
-						Tag("agadfds"),
-						Tag("fddsffdsfsdfdfsdfdsfdsfdsfdsfdsfsdfsfdsdsf"),
-						Tag("agadffdsffdds"),
-						Tag("fdfdsgdsfsdfdsgsdgdsgsd"),
-						Tag("agadfds"),
-						Tag("fdfdsgdsgsdgdsgsd"),
-						Tag("fddsfdsfdsf"),
-						Tag("agadfdsfsdfdsfdsfdsfdsfsdfdsds"),
-					)
-				)
+			val bottomSheetFragment = BottomSheetFragment(originalList)
 			bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
-
 			return@setOnMenuItemClickListener true
 		}
 
@@ -126,6 +101,11 @@ class MainActivity : BaseActivity() {
 				binding.rvQuestions.visibility = View.VISIBLE
 				binding.txtNoResult.visibility = View.GONE
 				adapter.setList(originalList)
+				questionViewModel.getAverageCount(QuestionResponse(originalList))
+					.observe(this@MainActivity, { list ->
+						binding.lblAvgViewCount.text = list[0]
+						binding.lblAvgAnsCount.text = list[1]
+					})
 				return true
 			}
 
@@ -151,11 +131,17 @@ class MainActivity : BaseActivity() {
 		}
 
 		if (filteredList.isEmpty()) {
-			Log.d(TAG, "rv gone: #@#$@----$#$#@@")
+			binding.lblAvgViewCount.text = "0"
+			binding.lblAvgAnsCount.text = "0"
 			binding.txtNoResult.visibility = View.VISIBLE
 			binding.rvQuestions.visibility = View.GONE
 
 		} else {
+			questionViewModel.getAverageCount(QuestionResponse(filteredList))
+				.observe(this, { list ->
+					binding.lblAvgViewCount.text = list[0]
+					binding.lblAvgAnsCount.text = list[1]
+				})
 			binding.rvQuestions.visibility = View.VISIBLE
 			binding.txtNoResult.visibility = View.GONE
 			adapter.setList(filteredList)

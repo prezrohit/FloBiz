@@ -10,39 +10,77 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.RecyclerView
 import com.flobiz.app.R
+import com.flobiz.app.databinding.RowAdBinding
 import com.flobiz.app.databinding.RowQuestionBinding
 import com.flobiz.app.main.FloBizApplication
+import com.flobiz.app.model.Ad
 import com.flobiz.app.model.Question
 import com.flobiz.app.ui.contract.MainActivityContract
 import com.flobiz.app.ui.presenter.MainActivityPresenter
 
-class QuestionAdapter(private val context: Context, private var questionList: List<Question>) :
-	RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>(), MainActivityContract.View {
+class QuestionAdapter(private val context: Context, private var list: List<Any>) :
+	RecyclerView.Adapter<RecyclerView.ViewHolder>(), MainActivityContract.View {
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-		val binding: RowQuestionBinding = DataBindingUtil.inflate(
-			LayoutInflater.from(parent.context),
-			R.layout.row_question,
-			parent,
-			false
-		)
+		if (viewType == 0) {
+			val binding: RowAdBinding = DataBindingUtil.inflate(
+				LayoutInflater.from(parent.context),
+				R.layout.row_ad,
+				parent,
+				false
+			)
+			return AdViewHolder(binding)
 
-		val presenter = MainActivityPresenter(this)
-		binding.setVariable(BR.presenter, presenter)
+		} else {
 
-		return QuestionViewHolder(binding)
+			val binding: RowQuestionBinding = DataBindingUtil.inflate(
+				LayoutInflater.from(parent.context),
+				R.layout.row_question,
+				parent,
+				false
+			)
+
+			val presenter = MainActivityPresenter(this)
+			binding.setVariable(BR.presenter, presenter)
+
+			return QuestionViewHolder(binding)
+		}
 	}
 
-	override fun getItemCount(): Int = questionList.size
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		if (getItemViewType(position) == 0) {
+			val adViewHolder : AdViewHolder = holder as AdViewHolder
+			adViewHolder.bind(list[position] as Ad)
 
-	override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
-		holder.bind(questionList[position])
+		} else {
+			val questionViewHolder : QuestionViewHolder = holder as QuestionViewHolder
+			questionViewHolder.bind(list[position] as Question)
+		}
 	}
 
-	fun setList(questionList: List<Question>) {
-		this.questionList = questionList
+	override fun getItemViewType(position: Int): Int {
+		return if (list[position] is Ad) 0 else 1
+	}
+
+	override fun getItemCount(): Int = list.size
+
+	fun setList(list: List<Any>) {
+		this.list = list
 		notifyDataSetChanged()
+	}
+
+	override fun onClickItem(question: Question?) {
+		if (FloBizApplication.hasNetwork()) {
+			val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(question?.link))
+			context.startActivity(browserIntent)
+
+		} else Toast.makeText(
+			context,
+			"You are not connected to the Internet",
+			Toast.LENGTH_SHORT
+		)
+			.show()
 	}
 
 	inner class QuestionViewHolder(private val binding: RowQuestionBinding) :
@@ -53,12 +91,11 @@ class QuestionAdapter(private val context: Context, private var questionList: Li
 		}
 	}
 
-	override fun onClickItem(question: Question?) {
-		if (FloBizApplication.hasNetwork()) {
-			val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(question?.link))
-			context.startActivity(browserIntent)
+	inner class AdViewHolder(private val binding: RowAdBinding) :
+		RecyclerView.ViewHolder(binding.root) {
+		fun bind(item: Ad) {
 
-		} else Toast.makeText(context, "You are not connected to the Internet", Toast.LENGTH_SHORT)
-			.show()
+			binding.ad = item
+		}
 	}
 }
