@@ -23,12 +23,11 @@ class BottomSheetFragment(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View {
 
+	): View {
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
 		binding.chipGroup.isSingleSelection = true
-
 
 		list.forEach { tag ->
 			val chip = Chip(context)
@@ -41,14 +40,8 @@ class BottomSheetFragment(
 		}
 
 		binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
-			/*Log.d(TAG, "onCreateView: $checkedId")
-			if (checkedId >= 0)
-				Log.d(TAG, "from List: ${list[checkedId - 1].name}")
-*/
 			tagCheckedListener.onTagChecked(checkedId)
 		}
-
-		Log.d(TAG, "group size: ${binding.chipGroup.size}")
 
 		return binding.root
 	}

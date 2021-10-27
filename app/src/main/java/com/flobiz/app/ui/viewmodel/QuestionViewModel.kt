@@ -1,10 +1,10 @@
 package com.flobiz.app.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.flobiz.app.model.Question
 import com.flobiz.app.model.QuestionResponse
 import com.flobiz.app.repository.QuestionRepository
 import kotlinx.coroutines.Dispatchers
@@ -25,22 +25,22 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 		return repository.fetchAllQuestions(key, order, sort, site)
 	}
 
-	fun getAverageCount(questionResponse: QuestionResponse): MutableLiveData<List<String>> {
+	fun getAverageCount(questionList: List<Any>): MutableLiveData<List<String>> {
 
-		var liveData: MutableLiveData<List<String>> = MutableLiveData()
+		val liveData: MutableLiveData<List<String>> = MutableLiveData()
 
 		viewModelScope.launch {
-			liveData.postValue(calculateAverageCount(questionResponse).value)
+			liveData.postValue(calculateAverageCount(questionList).value)
 		}
 
 		return liveData
 	}
 
-	private suspend fun calculateAverageCount(questionResponse: QuestionResponse): MutableLiveData<List<String>> =
+	private suspend fun calculateAverageCount(questionList: List<Any>): MutableLiveData<List<String>> =
 
 		withContext(Dispatchers.Default) {
-			var avgAnsCount = 0.0
-			var avgViewCount = 0.0
+			val avgAnsCount: Double
+			val avgViewCount: Double
 
 			var totalItemViewCount = 0
 			var totalItemAnsCount = 0
@@ -48,27 +48,31 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 			var sumViewCount = 0.0
 			var sumAnsCount = 0.0
 
-			questionResponse.items.forEach { question ->
-				if (question.view_count > 0) {
-					totalItemViewCount++
-					sumViewCount += question.view_count
-				}
+			questionList.forEach { question ->
+				if (question is Question) {
+					if (question.view_count > 0) {
+						totalItemViewCount++
+						sumViewCount += question.view_count
+					}
 
-				if (question.answer_count > 0) {
-					totalItemAnsCount++
-					sumAnsCount += question.answer_count
+					if (question.answer_count > 0) {
+						totalItemAnsCount++
+						sumAnsCount += question.answer_count
+					}
 				}
 			}
 
 			avgAnsCount = sumAnsCount / (totalItemAnsCount).toDouble()
 			avgViewCount = sumViewCount / (totalItemViewCount).toDouble()
 
-			return@withContext MutableLiveData(arrayListOf(String.format("%.2f", avgViewCount), String.format("%.2f", avgAnsCount)))
+			return@withContext MutableLiveData(
+				arrayListOf(
+					String.format("%.2f", avgViewCount),
+					String.format("%.2f", avgAnsCount)
+				)
+			)
 		}
-
-
 }
-
 
 class QuestionViewModelFactory constructor(private val repository: QuestionRepository) :
 	ViewModelProvider.Factory {

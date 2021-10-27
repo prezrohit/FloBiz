@@ -18,7 +18,7 @@ import com.flobiz.app.model.Question
 import com.flobiz.app.ui.contract.MainActivityContract
 import com.flobiz.app.ui.presenter.MainActivityPresenter
 
-class QuestionAdapter(private val context: Context, private var list: List<Any>) :
+class MainAdapter(private val context: Context, private var list: List<Any>) :
 	RecyclerView.Adapter<RecyclerView.ViewHolder>(), MainActivityContract.View {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -50,11 +50,11 @@ class QuestionAdapter(private val context: Context, private var list: List<Any>)
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		if (getItemViewType(position) == 0) {
-			val adViewHolder : AdViewHolder = holder as AdViewHolder
+			val adViewHolder: AdViewHolder = holder as AdViewHolder
 			adViewHolder.bind(list[position] as Ad)
 
 		} else {
-			val questionViewHolder : QuestionViewHolder = holder as QuestionViewHolder
+			val questionViewHolder: QuestionViewHolder = holder as QuestionViewHolder
 			questionViewHolder.bind(list[position] as Question)
 		}
 	}
@@ -79,14 +79,13 @@ class QuestionAdapter(private val context: Context, private var list: List<Any>)
 			context,
 			"You are not connected to the Internet",
 			Toast.LENGTH_SHORT
-		)
-			.show()
+
+		).show()
 	}
 
 	inner class QuestionViewHolder(private val binding: RowQuestionBinding) :
 		RecyclerView.ViewHolder(binding.root) {
 		fun bind(item: Question) {
-
 			binding.question = item
 		}
 	}
@@ -94,7 +93,6 @@ class QuestionAdapter(private val context: Context, private var list: List<Any>)
 	inner class AdViewHolder(private val binding: RowAdBinding) :
 		RecyclerView.ViewHolder(binding.root) {
 		fun bind(item: Ad) {
-
 			binding.ad = item
 		}
 	}
