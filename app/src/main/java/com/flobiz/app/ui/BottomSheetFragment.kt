@@ -40,7 +40,7 @@ class BottomSheetFragment(
 			binding.chipGroup.addView(chip)
 		}
 
-		binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+		binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
 			/*Log.d(TAG, "onCreateView: $checkedId")
 			if (checkedId >= 0)
 				Log.d(TAG, "from List: ${list[checkedId - 1].name}")

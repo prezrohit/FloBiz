@@ -61,6 +61,9 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 		).observe(this, { response ->
 
+			if (response.items.isEmpty())
+				binding.txtNoResult.visibility = View.VISIBLE
+
 			binding.progressBar.visibility = View.GONE
 
 			response.items.forEach { question ->
@@ -70,6 +73,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 			}
 
 			questionViewModel.getAverageCount(response).observe(this, { list ->
+				binding.avgCountContainer.visibility = View.VISIBLE
 				binding.lblAvgViewCount.text = list[0]
 				binding.lblAvgAnsCount.text = list[1]
 			})
@@ -88,7 +92,6 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		val searchView = item?.actionView as SearchView
 
 		val filterItem = menu.findItem(R.id.action_filter)
-		handleCheckedTag()
 		filterItem.setOnMenuItemClickListener {
 			val bottomSheetFragment = BottomSheetFragment(handleCheckedTag(), this)
 			bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
@@ -97,8 +100,10 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 			override fun onQueryTextSubmit(query: String?): Boolean {
-				searchQuery(query)
-				searchView.clearFocus()
+				if (query != null && query.isNotEmpty()) {
+					searchQuery(query)
+					searchView.clearFocus()
+				}
 				return true
 			}
 
@@ -110,15 +115,18 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 		item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
 			override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+				searchView.setQuery("", false)
 				binding.rvQuestions.visibility = View.VISIBLE
 				binding.txtNoResult.visibility = View.GONE
 				adapter.setList(originalList)
 
 				questionViewModel.getAverageCount(QuestionResponse(originalList))
 					.observe(this@MainActivity, { list ->
+						binding.avgCountContainer.visibility = View.VISIBLE
 						binding.lblAvgViewCount.text = list[0]
 						binding.lblAvgAnsCount.text = list[1]
 					})
+
 				return true
 			}
 
@@ -134,7 +142,6 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 	fun searchQuery(string: String?) {
 		filteredList.clear()
 
-		Log.d(TAG, "on search: $checkedIndex")
 		originalList.forEach { question ->
 			if ((checkedIndex == -1 || question.tags.contains(tagList[checkedIndex - 1].name))
 				&& (question.title.contains(string!!, true)
@@ -144,8 +151,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		}
 
 		if (filteredList.isEmpty()) {
-			binding.lblAvgViewCount.text = "0"
-			binding.lblAvgAnsCount.text = "0"
+			binding.avgCountContainer.visibility = View.GONE
 			binding.txtNoResult.visibility = View.VISIBLE
 			binding.rvQuestions.visibility = View.GONE
 
@@ -155,6 +161,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 					binding.lblAvgViewCount.text = list[0]
 					binding.lblAvgAnsCount.text = list[1]
 				})
+			binding.avgCountContainer.visibility = View.VISIBLE
 			binding.rvQuestions.visibility = View.VISIBLE
 			binding.txtNoResult.visibility = View.GONE
 			adapter.setList(filteredList)
@@ -178,7 +185,6 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		if (checkedIndex >= tagList.size) {
 			checkedIndex %= tagList.size
 		}
-		Log.d(TAG, "onTagChecked: $checkedIndex")
 	}
 
 	companion object {

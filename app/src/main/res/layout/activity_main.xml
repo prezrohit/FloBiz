@@ -6,7 +6,7 @@
 	<androidx.coordinatorlayout.widget.CoordinatorLayout
 		android:id="@+id/coordinatorLayout"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="match_parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
@@ -19,8 +19,8 @@
 			android:layout_gravity="center"
 			android:text="No Results Found"
 			android:textSize="20sp"
-			android:translationZ="1dp"
-			android:visibility="gone" />
+			android:visibility="gone"
+			android:translationZ="1dp" />
 
 		<ProgressBar
 			android:id="@+id/progressBar"
@@ -52,6 +52,7 @@
 				android:layout_height="wrap_content">
 
 				<androidx.constraintlayout.widget.ConstraintLayout
+					android:id="@+id/avgCountContainer"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:paddingVertical="10dp">
