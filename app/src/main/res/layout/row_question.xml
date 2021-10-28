@@ -44,21 +44,31 @@
 				style="@style/questionTitle"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_marginHorizontal="10dp"
+				android:layout_marginStart="15dp"
+				android:layout_marginEnd="10dp"
+				android:layout_marginBottom="5dp"
 				android:ellipsize="end"
+				android:fontFamily="@font/ibm_plex_sans"
 				android:maxLines="2"
 				android:text="@{question.title}"
+				app:layout_constraintBottom_toTopOf="@id/txtPostedBy"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toEndOf="@+id/img_avatar"
 				app:layout_constraintTop_toTopOf="parent" />
 
 			<TextView
 				android:id="@+id/txtPostedBy"
-				style="@style/TextAppearance.MaterialComponents.Subtitle1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginHorizontal="10dp"
+				android:layout_marginStart="15dp"
+				android:layout_marginEnd="10dp"
+				android:ellipsize="end"
+				android:fontFamily="@font/poppins"
+				android:maxLines="1"
 				android:text="@{question.owner.display_name}"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toStartOf="@id/txtDatePosted"
+				app:layout_constraintHorizontal_bias="0.0"
 				app:layout_constraintStart_toEndOf="@+id/img_avatar"
 				app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
@@ -66,13 +76,14 @@
 				android:id="@+id/txtDatePosted"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginHorizontal="10dp"
+				android:layout_marginStart="15dp"
+				android:layout_marginEnd="10dp"
+				android:fontFamily="@font/poppins"
 				android:text="@{Formatter.format(question.creation_date)}"
 				app:layout_constraintBottom_toBottomOf="@+id/txtPostedBy"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintTop_toTopOf="@+id/txtPostedBy" />
 
 		</androidx.constraintlayout.widget.ConstraintLayout>
-
 	</androidx.cardview.widget.CardView>
 </layout>

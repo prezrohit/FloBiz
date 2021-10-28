@@ -66,6 +66,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 			if (response.items.isEmpty())
 				binding.txtNoResult.visibility = View.VISIBLE
+
 			else {
 				response.items.forEach { question ->
 					question.tags.forEach { tag ->
@@ -104,6 +105,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		filterItem.setOnMenuItemClickListener {
 			val bottomSheetFragment = BottomSheetFragment(handleCheckedTag(), this)
 			bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
+			
 			return@setOnMenuItemClickListener true
 		}
 

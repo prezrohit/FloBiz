@@ -19,8 +19,8 @@
 			android:layout_gravity="center"
 			android:text="No Results Found"
 			android:textSize="20sp"
-			android:visibility="gone"
-			android:translationZ="1dp" />
+			android:translationZ="1dp"
+			android:visibility="gone" />
 
 		<ProgressBar
 			android:id="@+id/progressBar"
@@ -47,9 +47,9 @@
 			<com.google.android.material.appbar.CollapsingToolbarLayout
 				android:id="@+id/collapsing_toolbar"
 				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
 				app:layout_collapseMode="pin"
-				app:layout_scrollFlags="scroll|enterAlways"
-				android:layout_height="wrap_content">
+				app:layout_scrollFlags="scroll|enterAlways">
 
 				<androidx.constraintlayout.widget.ConstraintLayout
 					android:id="@+id/avgCountContainer"
@@ -69,15 +69,14 @@
 
 						<TextView
 							android:id="@+id/textView2"
-							style="@style/TextAppearance.MaterialComponents.Subtitle1"
+							style="@style/TextAppearance.MaterialComponents.Subtitle2"
 							android:layout_width="0dp"
 							android:layout_height="wrap_content"
+							android:fontFamily="@font/epilogue"
 							android:gravity="center"
-							android:padding="4dp"
-							android:text="Avg View Count"
+							android:text="avg view count"
 							app:layout_constraintBottom_toTopOf="@+id/lblAvgViewCount"
 							app:layout_constraintEnd_toEndOf="parent"
-							app:layout_constraintHorizontal_bias="0.5"
 							app:layout_constraintStart_toStartOf="parent"
 							app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,8 +85,9 @@
 							style="@style/TextAppearance.AppCompat.Title"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							android:layout_marginTop="5dp"
+							android:fontFamily="@font/droid_sans_bold"
 							android:gravity="center"
-							android:padding="4dp"
 							android:text="0"
 							app:layout_constraintBottom_toBottomOf="parent"
 							app:layout_constraintEnd_toEndOf="@id/textView2"
@@ -109,12 +109,12 @@
 
 						<TextView
 							android:id="@+id/textView3"
-							style="@style/TextAppearance.MaterialComponents.Subtitle1"
+							style="@style/TextAppearance.MaterialComponents.Subtitle2"
 							android:layout_width="0dp"
 							android:layout_height="wrap_content"
+							android:fontFamily="@font/epilogue"
 							android:gravity="center"
-							android:padding="4dp"
-							android:text="Avg Answer Count"
+							android:text="avg answer count"
 							app:layout_constraintBottom_toTopOf="@+id/lblAvgAnsCount"
 							app:layout_constraintEnd_toEndOf="parent"
 							app:layout_constraintHorizontal_bias="0.5"
@@ -126,8 +126,9 @@
 							style="@style/TextAppearance.AppCompat.Title"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							android:layout_marginTop="5dp"
+							android:fontFamily="@font/droid_sans_bold"
 							android:gravity="center"
-							android:padding="4dp"
 							android:text="0"
 							app:layout_constraintBottom_toBottomOf="parent"
 							app:layout_constraintEnd_toEndOf="@id/textView3"

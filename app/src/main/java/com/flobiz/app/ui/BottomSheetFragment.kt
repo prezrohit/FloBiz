@@ -5,7 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.size
+import androidx.fragment.app.DialogFragment
+import com.flobiz.app.R
 import com.flobiz.app.databinding.LayoutBottomSheetBinding
 import com.flobiz.app.model.Tag
 import com.flobiz.app.ui.contract.TagCheckedListener
@@ -15,6 +16,7 @@ import com.google.android.material.chip.Chip
 class BottomSheetFragment(
 	private var list: List<Tag>,
 	private val tagCheckedListener: TagCheckedListener
+
 ) : BottomSheetDialogFragment() {
 
 	private lateinit var binding: LayoutBottomSheetBinding
@@ -27,12 +29,16 @@ class BottomSheetFragment(
 	): View {
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
-		binding.chipGroup.isSingleSelection = true
-
 		list.forEach { tag ->
-			val chip = Chip(context)
+
+			val chip = layoutInflater.inflate(
+				R.layout.layout_custom_chip,
+				binding.chipGroup,
+				false
+
+			) as Chip
+
 			chip.text = tag.name
-			chip.isCheckable = true
 			tag.isChecked.observe(this, {
 				chip.isChecked = it
 			})
@@ -43,7 +49,22 @@ class BottomSheetFragment(
 			tagCheckedListener.onTagChecked(checkedId)
 		}
 
+		binding.btnClearFilter.setOnClickListener {
+			var selectedTag = binding.chipGroup.checkedChipId
+			if (selectedTag > 0) {
+				selectedTag--
+				selectedTag %= list.size
+				list[selectedTag].isChecked.postValue(false)
+			}
+			tagCheckedListener.onTagChecked(-1)
+		}
+
 		return binding.root
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialog)
 	}
 
 	companion object {

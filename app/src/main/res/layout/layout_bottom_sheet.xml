@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<androidx.coordinatorlayout.widget.CoordinatorLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="wrap_content"
+		tools:context=".ui.MainActivity">
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="300dp">
 
-			<com.google.android.material.chip.ChipGroup
-				android:id="@+id/chipGroup"
-				android:layout_width="match_parent"
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/btnClearFilter"
+				style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_margin="7dp"
+				android:text="Clear Filter"
+				app:icon="@drawable/ic_close"
+				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+				app:layout_constraintTop_toBottomOf="@id/scrollView"
+				app:layout_constraintVertical_bias="1.0"
+				app:strokeWidth="1dp" />
+
+			<ScrollView
+				android:id="@+id/scrollView"
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:scrollbars="none"
+				app:layout_anchorGravity="center"
+				app:layout_constraintBottom_toTopOf="@+id/btnClearFilter"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent">
+
+				<com.google.android.material.chip.ChipGroup
+					android:id="@+id/chipGroup"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="10dp"
+					app:singleSelection="true" />
+
+			</ScrollView>
 
 		</androidx.constraintlayout.widget.ConstraintLayout>
-
 	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
