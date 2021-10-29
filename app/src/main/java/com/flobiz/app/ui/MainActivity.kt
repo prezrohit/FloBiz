@@ -25,7 +25,6 @@ import com.flobiz.app.ui.viewmodel.QuestionViewModelFactory
 import com.flobiz.app.util.Constants
 import com.flobiz.app.webservice.WebServiceClient
 
-
 class MainActivity : BaseActivity(), TagCheckedListener {
 
 	private var checkedIndex: Int = -1
