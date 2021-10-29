@@ -1,7 +1,6 @@
 package com.flobiz.app.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 
 class BottomSheetFragment(
-	private var list: List<Tag>,
+	private var list: ArrayList<Tag>,
 	private val tagCheckedListener: TagCheckedListener
 
 ) : BottomSheetDialogFragment() {
@@ -29,6 +28,13 @@ class BottomSheetFragment(
 	): View {
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
+		return binding.root
+	}
+
+	fun setList(list: ArrayList<Tag>) {
+		this.list = list
+
+		binding.progressBar.visibility = View.GONE
 		list.forEachIndexed { index, tag ->
 			val chip = layoutInflater.inflate(
 				R.layout.layout_custom_chip,
@@ -54,8 +60,6 @@ class BottomSheetFragment(
 				list[binding.chipGroup.checkedChipId].isChecked.postValue(false)
 			tagCheckedListener.onTagChecked(-1)
 		}
-
-		return binding.root
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {

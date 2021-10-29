@@ -5,10 +5,12 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.flobiz.app.R
 import com.flobiz.app.databinding.ActivityMainBinding
 import com.flobiz.app.model.Ad
@@ -22,9 +24,6 @@ import com.flobiz.app.ui.viewmodel.QuestionViewModel
 import com.flobiz.app.ui.viewmodel.QuestionViewModelFactory
 import com.flobiz.app.util.Constants
 import com.flobiz.app.webservice.WebServiceClient
-import kotlin.collections.HashSet
-import androidx.recyclerview.widget.RecyclerView
-import android.widget.Toast
 
 
 class MainActivity : BaseActivity(), TagCheckedListener {
@@ -224,6 +223,9 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 	fun onClickFab(view: View) {
 		val bottomSheetFragment = BottomSheetFragment(arrayListOf(), this)
 		bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
+		questionViewModel.getChangedTagList(checkedIndex, tagList).observe(this, { newList ->
+			bottomSheetFragment.setList(newList)
+		})
 	}
 
 	private fun handleCheckedTag(): List<Tag> {

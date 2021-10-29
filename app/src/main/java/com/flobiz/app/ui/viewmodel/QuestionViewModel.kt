@@ -1,11 +1,9 @@
 package com.flobiz.app.ui.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.flobiz.app.model.Question
 import com.flobiz.app.model.QuestionResponse
+import com.flobiz.app.model.Tag
 import com.flobiz.app.repository.QuestionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +31,14 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 			liveData.postValue(calculateAverageCount(questionList).value)
 		}
 
+		return liveData
+	}
+
+	fun getChangedTagList(count: Int, tagList: ArrayList<Tag>): MutableLiveData<ArrayList<Tag>> {
+		val liveData: MutableLiveData<ArrayList<Tag>> = MutableLiveData()
+		viewModelScope.launch {
+			liveData.postValue(generateChangedTagList(count, tagList).value)
+		}
 		return liveData
 	}
 
@@ -72,6 +78,25 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 				)
 			)
 		}
+
+	private suspend fun generateChangedTagList(
+		count: Int,
+		tagList: ArrayList<Tag>
+
+	): LiveData<ArrayList<Tag>> {
+		val listData: MutableLiveData<ArrayList<Tag>> = MutableLiveData()
+		var temp = count
+		withContext(Dispatchers.Default) {
+			val resultList: ArrayList<Tag> = ArrayList()
+			tagList.forEach { tag ->
+				if (temp == 0) resultList.add(Tag(tag.name, MutableLiveData(true)))
+				else resultList.add(tag)
+				temp--
+			}
+			listData.postValue(resultList)
+		}
+		return listData
+	}
 }
 
 class QuestionViewModelFactory constructor(private val repository: QuestionRepository) :
