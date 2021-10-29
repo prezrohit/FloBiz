@@ -29,8 +29,7 @@ class BottomSheetFragment(
 	): View {
 		binding = LayoutBottomSheetBinding.inflate(inflater, container, false)
 
-		list.forEach { tag ->
-
+		list.forEachIndexed { index, tag ->
 			val chip = layoutInflater.inflate(
 				R.layout.layout_custom_chip,
 				binding.chipGroup,
@@ -42,20 +41,18 @@ class BottomSheetFragment(
 			tag.isChecked.observe(this, {
 				chip.isChecked = it
 			})
+			chip.id = index
 			binding.chipGroup.addView(chip)
 		}
 
 		binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
+			Log.d(TAG, "onCreateView: $checkedId")
 			tagCheckedListener.onTagChecked(checkedId)
 		}
 
 		binding.btnClearFilter.setOnClickListener {
-			var selectedTag = binding.chipGroup.checkedChipId
-			if (selectedTag > 0) {
-				selectedTag--
-				selectedTag %= list.size
-				list[selectedTag].isChecked.postValue(false)
-			}
+			if (binding.chipGroup.checkedChipId >= 0)
+				list[binding.chipGroup.checkedChipId].isChecked.postValue(false)
 			tagCheckedListener.onTagChecked(-1)
 		}
 
@@ -70,4 +67,6 @@ class BottomSheetFragment(
 	companion object {
 		const val TAG = "BottomSheetFragment"
 	}
+
+
 }

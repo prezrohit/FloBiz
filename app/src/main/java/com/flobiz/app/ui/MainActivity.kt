@@ -25,7 +25,6 @@ import java.util.*
 import kotlin.collections.HashSet
 import androidx.recyclerview.widget.RecyclerView
 
-
 class MainActivity : BaseActivity(), TagCheckedListener {
 
 	private var checkedIndex: Int = -1
@@ -56,6 +55,30 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 			it.adapter = adapter
 		}
 
+		binding.swipeRefreshLayout.isRefreshing = true
+
+		loadList()
+
+		binding.rvQuestions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+				if (dy > 0 || dy < 0 && binding.fabFilter.isShown)
+					binding.fabFilter.hide()
+			}
+
+			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+				if (newState == RecyclerView.SCROLL_STATE_IDLE)
+					binding.fabFilter.show()
+
+				super.onScrollStateChanged(recyclerView, newState)
+			}
+		})
+
+		binding.swipeRefreshLayout.setOnRefreshListener {
+			loadList()
+		}
+	}
+
+	private fun loadList() {
 		questionViewModel.fetchAllQuestions(
 			Constants.key,
 			Constants.order,
@@ -64,7 +87,9 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 		).observe(this, { response ->
 
-			binding.progressBar.visibility = View.GONE
+			binding.swipeRefreshLayout.isRefreshing = false
+
+			checkedIndex = -1
 
 			if (response.items.isEmpty()) {
 				binding.txtNoResult.visibility = View.VISIBLE
@@ -100,20 +125,6 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 				originalList.shuffle()
 
 				adapter.setList(originalList)
-			}
-		})
-
-		binding.rvQuestions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-				if (dy > 0 || dy < 0 && binding.fabFilter.isShown)
-					binding.fabFilter.hide()
-			}
-
-			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-				if (newState == RecyclerView.SCROLL_STATE_IDLE)
-					binding.fabFilter.show()
-
-				super.onScrollStateChanged(recyclerView, newState)
 			}
 		})
 	}
@@ -204,22 +215,19 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		val newList: ArrayList<Tag> = arrayListOf()
 		var temp = checkedIndex
 		tagList.forEach { tag ->
-			temp--
 			if (temp == 0) newList.add(Tag(tag.name, MutableLiveData(true)))
 			else newList.add(tag)
+			temp--
 		}
 		return newList
 	}
 
 	override fun onTagChecked(index: Int) {
 		checkedIndex = index
-
-		if (checkedIndex >= tagList.size) {
-			checkedIndex %= tagList.size
-		}
 	}
 
 	companion object {
 		private const val TAG = "MainActivity"
 	}
 }
+

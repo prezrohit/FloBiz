@@ -19,14 +19,6 @@
 			android:translationZ="1dp"
 			android:visibility="gone" />
 
-		<ProgressBar
-			android:id="@+id/progressBar"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="fdfsdfs"
-			android:translationZ="1dp" />
-
 		<com.google.android.material.appbar.AppBarLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -140,26 +132,30 @@
 			</com.google.android.material.appbar.CollapsingToolbarLayout>
 		</com.google.android.material.appbar.AppBarLayout>
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/rvQuestions"
+		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+			android:id="@+id/swipeRefreshLayout"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			tools:listitem="@layout/row_question" />
+			android:layout_height="match_parent">
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/rvQuestions"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+				tools:listitem="@layout/row_question" />
+
+		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 		<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id="@+id/fab_filter"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="onClickFab"
-			android:src="@drawable/ic_filter"
 			android:layout_gravity="bottom|end"
 			android:layout_marginEnd="24dp"
 			android:layout_marginBottom="24dp"
+			android:onClick="onClickFab"
+			android:src="@drawable/ic_filter"
 			app:tint="@color/white" />
 
 	</androidx.coordinatorlayout.widget.CoordinatorLayout>
