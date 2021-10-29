@@ -34,14 +34,6 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 		return liveData
 	}
 
-	fun getChangedTagList(count: Int, tagList: ArrayList<Tag>): MutableLiveData<ArrayList<Tag>> {
-		val liveData: MutableLiveData<ArrayList<Tag>> = MutableLiveData()
-		viewModelScope.launch {
-			liveData.postValue(generateChangedTagList(count, tagList).value)
-		}
-		return liveData
-	}
-
 	private suspend fun calculateAverageCount(questionList: List<Any>): MutableLiveData<List<String>> =
 
 		withContext(Dispatchers.Default) {
@@ -78,6 +70,14 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
 				)
 			)
 		}
+
+	fun getChangedTagList(count: Int, tagList: ArrayList<Tag>): MutableLiveData<ArrayList<Tag>> {
+		val liveData: MutableLiveData<ArrayList<Tag>> = MutableLiveData()
+		viewModelScope.launch {
+			liveData.postValue(generateChangedTagList(count, tagList).value)
+		}
+		return liveData
+	}
 
 	private suspend fun generateChangedTagList(
 		count: Int,

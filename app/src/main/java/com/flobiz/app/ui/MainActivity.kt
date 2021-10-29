@@ -228,17 +228,6 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		})
 	}
 
-	private fun handleCheckedTag(): List<Tag> {
-		val newList: ArrayList<Tag> = arrayListOf()
-		var temp = checkedIndex
-		tagList.forEach { tag ->
-			if (temp == 0) newList.add(Tag(tag.name, MutableLiveData(true)))
-			else newList.add(tag)
-			temp--
-		}
-		return newList
-	}
-
 	override fun onTagChecked(index: Int) {
 		checkedIndex = index
 		searchQuery("")
