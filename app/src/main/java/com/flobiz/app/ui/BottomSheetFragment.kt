@@ -46,7 +46,6 @@ class BottomSheetFragment(
 		}
 
 		binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
-			Log.d(TAG, "onCreateView: $checkedId")
 			tagCheckedListener.onTagChecked(checkedId)
 		}
 

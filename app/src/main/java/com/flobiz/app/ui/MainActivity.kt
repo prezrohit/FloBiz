@@ -1,6 +1,7 @@
 package com.flobiz.app.ui
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,18 +25,21 @@ import com.flobiz.app.webservice.WebServiceClient
 import java.util.*
 import kotlin.collections.HashSet
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.Toast
+
 
 class MainActivity : BaseActivity(), TagCheckedListener {
 
 	private var checkedIndex: Int = -1
+	private var doubleBackToExitPressedOnce: Boolean = false
 
 	private lateinit var binding: ActivityMainBinding
 	private lateinit var questionViewModel: QuestionViewModel
 	private val adapter = MainAdapter(this, arrayListOf())
 
 	private var tagList: ArrayList<Tag> = arrayListOf()
-	private var filteredList: ArrayList<Question> = arrayListOf()
 	private var originalList: ArrayList<Any> = arrayListOf()
+	private var filteredList: ArrayList<Question> = arrayListOf()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -173,6 +177,18 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 		})
 
 		return super.onCreateOptionsMenu(menu)
+	}
+
+	override fun onBackPressed() {
+		if (doubleBackToExitPressedOnce) {
+			super.onBackPressed();
+			return;
+		}
+
+		doubleBackToExitPressedOnce = true
+		Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+		Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
 	}
 
 	fun searchQuery(string: String?) {
