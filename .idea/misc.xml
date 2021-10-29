@@ -3,11 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/background_ad.xml" value="0.26481481481481484" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/circlular_background.xml" value="0.2351851851851852" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/circular_background.xml" value="0.2351851851851852" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/circular_image.xml" value="0.16203703703703703" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/corner_background.xml" value="0.1574074074074074" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/ic_add.xml" value="0.25092592592592594" />
+        <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/ic_close.xml" value="0.2755208333333333" />
+        <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/ic_close_small.xml" value="0.26481481481481484" />
+        <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/drawable/round_button.xml" value="0.26481481481481484" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/layout/content_avg_count.xml" value="0.264" />
         <entry key="..\:/workspace/AndroidStudioProjects/3.PRACTICE/FloBizApp/app/src/main/res/layout/content_main.xml" value="0.259375" />

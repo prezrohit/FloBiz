@@ -18,7 +18,7 @@ import com.flobiz.app.model.Question
 import com.flobiz.app.ui.contract.MainActivityContract
 import com.flobiz.app.ui.presenter.MainActivityPresenter
 
-class MainAdapter(private val context: Context, private var list: List<Any>) :
+class MainAdapter(private val context: Context, private var list: ArrayList<Any>) :
 	RecyclerView.Adapter<RecyclerView.ViewHolder>(), MainActivityContract.View {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -51,7 +51,7 @@ class MainAdapter(private val context: Context, private var list: List<Any>) :
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		if (getItemViewType(position) == 0) {
 			val adViewHolder: AdViewHolder = holder as AdViewHolder
-			adViewHolder.bind(list[position] as Ad)
+			adViewHolder.bind(list[position] as Ad, position)
 
 		} else {
 			val questionViewHolder: QuestionViewHolder = holder as QuestionViewHolder
@@ -66,7 +66,8 @@ class MainAdapter(private val context: Context, private var list: List<Any>) :
 	override fun getItemCount(): Int = list.size
 
 	fun setList(list: List<Any>) {
-		this.list = list
+		this.list.clear()
+		this.list.addAll(list)
 		notifyDataSetChanged()
 	}
 
@@ -92,7 +93,13 @@ class MainAdapter(private val context: Context, private var list: List<Any>) :
 
 	inner class AdViewHolder(private val binding: RowAdBinding) :
 		RecyclerView.ViewHolder(binding.root) {
-		fun bind(item: Ad) {
+
+		fun bind(item: Ad, position: Int) {
+			binding.btnClose.setOnClickListener {
+				list.removeAt(position)
+				notifyItemRemoved(position)
+				notifyItemRangeChanged(position, list.size);
+			}
 			binding.ad = item
 		}
 	}

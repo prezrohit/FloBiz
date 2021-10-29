@@ -22,7 +22,6 @@ import com.flobiz.app.ui.viewmodel.QuestionViewModel
 import com.flobiz.app.ui.viewmodel.QuestionViewModelFactory
 import com.flobiz.app.util.Constants
 import com.flobiz.app.webservice.WebServiceClient
-import java.util.*
 import kotlin.collections.HashSet
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
@@ -123,9 +122,9 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 				val imageUrl =
 					"https://miro.medium.com/max/1400/1*-WcKNO3KnP2u3bsiNt1tXw.png"
 
-				originalList.add(Ad(imageUrl, "Ad 1"))
-				originalList.add(Ad(imageUrl, "Ad 2"))
-				originalList.add(Ad(imageUrl, "Ad 3"))
+				originalList.add(Ad(imageUrl, "Ad"))
+				originalList.add(Ad(imageUrl, "Ad"))
+				originalList.add(Ad(imageUrl, "Ad"))
 				originalList.shuffle()
 
 				adapter.setList(originalList)
@@ -196,7 +195,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 		originalList.forEach { question ->
 			if (question is Question)
-				if ((checkedIndex == -1 || question.tags.contains(tagList[checkedIndex - 1].name))
+				if ((checkedIndex == -1 || question.tags.contains(tagList[checkedIndex].name))
 					&& (question.title.contains(string!!, true)
 							|| question.owner.display_name.contains(string, true))
 				)
@@ -223,7 +222,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 	}
 
 	fun onClickFab(view: View) {
-		val bottomSheetFragment = BottomSheetFragment(handleCheckedTag(), this)
+		val bottomSheetFragment = BottomSheetFragment(arrayListOf(), this)
 		bottomSheetFragment.show(supportFragmentManager, BottomSheetFragment.TAG)
 	}
 
@@ -240,6 +239,7 @@ class MainActivity : BaseActivity(), TagCheckedListener {
 
 	override fun onTagChecked(index: Int) {
 		checkedIndex = index
+		searchQuery("")
 	}
 
 	companion object {
